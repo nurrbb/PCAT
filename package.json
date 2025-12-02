@@ -1,0 +1,27 @@
+{
+  "name": "pcat",
+  "version": "1.0.0",
+  "description": "PCAT Photo App",
+  "keywords": [
+    "photo",
+    "app"
+  ],
+  "homepage": "https://github.com/nurrbb/PCAT#readme",
+  "bugs": {
+    "url": "https://github.com/nurrbb/PCAT/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nurrbb/PCAT.git"
+  },
+  "license": "ISC",
+  "author": "Nur B",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "prettier": "3.7.3"
+  }
+}
