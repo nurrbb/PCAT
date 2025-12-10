@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
+const methodOverride = require('method-override');
 const fileUpload = require('express-fileupload');
 const ejs = require('ejs');
 const path = require('path');
@@ -76,6 +77,20 @@ app.post('/photos', async (req, res) => {
     });
     res.redirect('/');
   });
+});
+
+app.get('/photos/edit/:id', async (req, res) => {
+  const photo = await Photo.findOne({ _id: req.params.id });
+  res.render('edit', { photo });
+});
+
+app.get('/photos/:id', async (req, res) => {
+  const photo = await Photo.findOne({ _id: req.params.id });
+  photo.title = req.body.title
+  photo.description = req.body.description
+  photo.save()
+
+  res.redirect(`/photos/${req.params.ide}`)
 });
 
 const port = 3000;
