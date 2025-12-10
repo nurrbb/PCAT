@@ -8,9 +8,10 @@ const Photo = require('./models/Photo');
 const app = express();
 
 //connect DB
-mongoose.connect(
-  'mongodb://127.0.0.1:27017/pcat-test-db'
-);
+mongoose
+  .connect('mongodb://127.0.0.1:27017/cleanblog-test-db')
+  .then(() => console.log('MongoDB connected'))
+  .catch((err) => console.log('DB error:', err));
 
 //TEMPLATE ENGINE
 app.set("view engine","ejs");
@@ -39,6 +40,14 @@ app.get('/', async (req, res) => {
   const photos = await Photo.find({})
   res.render('index',{photos})
 });
+
+app.get('/photos/:id', async (req, res) => {
+  const photo = await Photo.findById(req.params.id)
+  res.render('photo',{
+    photo
+  })
+});
+
 
 app.get('/about', (req, res) => {
   res.render('about')
