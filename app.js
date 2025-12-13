@@ -4,9 +4,8 @@ const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const fileUpload = require('express-fileupload');
 const ejs = require('ejs');
-const path = require('path');
-const fs = require('fs');
-const Photo = require('./models/Photo');
+const photoController = require('./controllers/photoController');
+const pageController = require('./controllers/pageController');
 
 const app = express();
 
@@ -19,16 +18,6 @@ mongoose
 //TEMPLATE ENGINE
 app.set('view engine', 'ejs');
 
-// const myLogger = (req, res, next) => {
-//   console.log('Middleware Log 1');
-//   next();
-// };
-
-// const myLogger2 = (req, res, next) => {
-//   console.log('Middleware Log 1');
-//   next();
-// };
-
 //MIDDLEWARES
 app.use(express.static(`public`));
 app.use(express.urlencoded({ extended: true }));
@@ -40,71 +29,23 @@ app.use(
   })
 );
 
-// app.use(myLogger);
-// app.use(myLogger2);
-
 //ROUTES
 
-app.get('/', async (req, res) => {
-  const photos = await Photo.find({}).sort('-dateCreated');
-  res.render('index', { photos });
-});
+app.get('/', photoController.getAllPhotos);
 
-app.get('/photos/:id', async (req, res) => {
-  const photo = await Photo.findById(req.params.id);
-  res.render('photo', {
-    photo,
-  });
-});
+app.get('/photos/:id', photoController.getPhoto);
 
-app.get('/about', (req, res) => {
-  res.render('about');
-});
+app.post('/photos', photoController.createPhoto);
 
-app.get('/add', (req, res) => {
-  res.render('add');
-});
+app.put('/photos/:id', photoController.updatePhoto);
 
-app.post('/photos', async (req, res) => {
-  const uploadDir = 'public/uploads';
+app.delete('/photos/edit/:id', photoController.deletePhoto);
 
-  if (!fs.existsSync(uploadDir)) {
-    fsmkdirSync(uploadDir);
-  }
+app.get('/about', pageController.getAboutPage);
 
-  let uploadImage = req.files.uploadImage;
-  let uploadPath = __dirname + '/public/uploads/' + uploadImage.name;
+app.get('/add', pageController.getAddPage);
 
-  uploadeImage.mv(uploadPath, async () => {
-    await Photo.create({
-      ...req.body,
-      image: '/uploads/' + uploadeImage.name,
-    });
-    res.redirect('/');
-  });
-});
-
-app.get('/photos/edit/:id', async (req, res) => {
-  const photo = await Photo.findOne({ _id: req.params.id });
-  res.render('edit', { photo });
-});
-
-app.get('/photos/:id', async (req, res) => {
-  const photo = await Photo.findOne({ _id: req.params.id });
-  photo.title = req.body.title;
-  photo.description = req.body.description;
-  photo.save();
-
-  res.redirect(`/photos/${req.params.ide}`);
-});
-
-app.delete('/photos/edit/:id', async (req, res) => {
-  const photo = await Photo.findOne({ _id: req.params.id });
-  let deletedImage = __dirname + '/public' + photo.image;
-  fs.unlinkSync(deletedImage);
-  await Photo.findByIdAndRemove(req.params.id);
-  res.redirect('/');
-});
+app.get('/photos/edit/:id', pageController.getEditPage);
 
 const port = 3000;
 app.listen(port, () => {

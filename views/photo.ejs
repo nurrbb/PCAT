@@ -1,54 +1,71 @@
-<%- include('partials/_header') -%>
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/_head') %>
+  <body>
 
-<body>
-	<div class="tm-page-wrap mx-auto">
-		<div class="position-relative">
-			
-            <%- include('partials/_navigation') -%>
+    <%- include('partials/_navigation') %>
 
-			<div class="tm-welcome-container tm-fixed-header tm-fixed-header-1">
-				<div class="text-center">
-					<p class="pt-5 px-3 tm-welcome-text tm-welcome-text-2 mb-1 text-white mx-auto">Background image can be fixed. Content will simply slide over.</p>                	
-				</div>                
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('/img/post-bg.jpg')">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="post-heading">
+              <h1><%= post.title %></h1>
+              <span class="meta">
+                Posted on
+                <%= post.dateCreated.toLocaleDateString('tr-TR') %>
+              </span>
             </div>
+          </div>
+        </div>
+      </div>
+    </header>
 
-			<!-- Header image -->
-            <div id="tm-fixed-header-bg"></div> 
-		</div>
+    <!-- Post Content -->
+    <article>
+      <div class="container">
+        <div class="row">
 
-		<!-- Page content -->
-		<div class="container-fluid">
-			<div class="mx-auto tm-content-container">
-				<main>
-					<div class="row mb-5 pb-4">
-						<div class="col-12">
-							<img src=" <%= photo.image %>" alt="Image" class="img-fluid tm-catalog-item-img">
-						</div>
-					</div>
-					<div class="row mb-5 pb-5">
-						<div class="col-xl-8 col-lg-7">
-							<!-- Video description -->
-							<div class="tm-video-description-box">
-								<h2 class="mb-5 tm-video-title"> <%= photo.title %> </h2>
-								<p class="mb-4">  <%= photo.description%> </p>	
-							</div>							
-						</div>
-						<div class="col-xl-4 col-lg-5">
-							<!-- Share box -->
-							<div class="tm-bg-gray tm-share-box">
-								<div class="text-center">
-									<a href="/photos/edit/<%= photo._id%>" class="btn btn-primary p-0 mb-4 tm-btn-animate tm-btn-download tm-icon-download"><span>Update Details</span></a>	
-								</div>	
-								<div class="text-center">
-									<a href= "/photos/<%=photo._id% >?method=DELETE" class="btn btn-danger p-0 tm-btn-animate tm-btn-download tm-icon-download"
-										onclick="return confirm('Are you sure?')"><span>Delete Photo</span></a>	
-								</div>								
-							</div>
-						</div>
-					</div>
-				</main>
+          <!-- LEFT: POST CONTENT -->
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <p><%= post.detail %></p>
 
-                <%- include('partials/_footer') -%>
+            <a href="#">
+              <img class="img-fluid" src="/img/post-sample-image.jpg" alt="">
+            </a>
+            <span class="caption text-muted">
+              To go places and do things that have never been done before – that’s what living is all about.
+            </span>
+          </div>
 
-</body>
+          <!-- RIGHT: ACTION BOX (UPDATE / DELETE) -->
+          <div class="col-lg-4 col-md-10 mx-auto mt-4 mt-lg-0">
+            <div class="card">
+              <div class="card-body text-center">
+
+                <a href="/posts/edit/<%= post._id %>" class="btn btn-warning btn-block mb-3">
+                  Update Post
+                </a>
+
+                <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
+                  <button type="submit" class="btn btn-danger btn-block"
+                    onclick="return confirm('ARE YOU SURE?')">
+                    Delete Post
+                  </button>
+                </form>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </article>
+
+    <hr>
+
+    <%- include('partials/_footer') %>
+  </body>
 </html>
